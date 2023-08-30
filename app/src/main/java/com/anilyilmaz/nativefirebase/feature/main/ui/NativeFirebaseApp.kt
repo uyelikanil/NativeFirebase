@@ -68,5 +68,16 @@ private fun NativeFirebaseNavHost(navController: NavHostController) {
                 }
             )
         }
+        composable(route = "profile") {
+            ProfileRoute(
+                onBackClick = { navController.popBackStack() },
+                onLogOutClick = {
+                    navController.navigate("signIn") {
+                        launchSingleTop = true
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
+        }
     }
 }

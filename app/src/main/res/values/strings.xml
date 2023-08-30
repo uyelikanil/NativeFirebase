@@ -15,4 +15,7 @@
     <string name="an_error_occured_while_sign_in">An error accured while sign in!</string>
     <string name="hi_there_nice_to_see_you">Hi there! Nice to see you.</string>
     <string name="list">List</string>
+    <string name="log_out">Log Out</string>
+    <string name="profile">Profile</string>
+    <string name="back">Back</string>
 </resources>
