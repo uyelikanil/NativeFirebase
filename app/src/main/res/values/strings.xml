@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Native Firebase</string>
+    <string name="brand_name">Scopic</string>
+    <string name="sign_in">Sign In</string>
+    <string name="email">Email</string>
+    <string name="your_email_address">Your email address</string>
+    <string name="password">Password</string>
+    <string name="your_password">Your password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="have_an_account">Have an Account?</string>
+    <string name="email_is_not_valid">Email is not valid!</string>
+    <string name="password_is_not_valid">Password is not valid!</string>
+    <string name="an_error_occured_while_sign_up">An error occured while sign up!</string>
     <string name="welcome">Welcome</string>
+    <string name="an_error_occured_while_sign_in">An error accured while sign in!</string>
 </resources>
