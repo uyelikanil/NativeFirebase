@@ -2,12 +2,14 @@ package com.anilyilmaz.nativefirebase.feature.signup
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -83,14 +85,13 @@ private fun SignUpScreen(
     onSignInClick: () -> Unit) {
     val context = LocalContext.current
 
-    Surface {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .safeContentPadding()
-        ) {
+    Box(modifier = Modifier.padding(horizontal = 32.dp)
+    ) {
+        Column {
             Text(
-                modifier = Modifier.padding(top = 16.dp),
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .statusBarsPadding(),
                 text = stringResource(id = R.string.sign_up),
                 fontSize = 30.sp)
 
@@ -100,8 +101,8 @@ private fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .statusBarsPadding()
                 .wrapContentSize(Alignment.Center)
-                .padding(horizontal = 32.dp)
         ) {
             when(uiState) {
                 is SignUpUiState.SignUp -> {
@@ -215,17 +216,14 @@ private fun SignUpLayout(userState: SignUpUserState,
 
 @Preview(showBackground = true)
 @Composable
-fun SignInScreenPreview() {
+fun SignUpScreenPreview() {
     NativeFirebaseTheme {
-        SignUpScreen(
-            SignUpUiState.Loading,
-            SignUpUserState(),
-            {},
-            {},
-            {},
-            {},
-            {},
-            {}
-        )
+        Surface(modifier = Modifier.fillMaxSize()) {
+            SignUpScreen(
+                SignUpUiState.Loading,
+                SignUpUserState(),
+                {}, {}, {}, {}, {}, {}
+            )
+        }
     }
 }

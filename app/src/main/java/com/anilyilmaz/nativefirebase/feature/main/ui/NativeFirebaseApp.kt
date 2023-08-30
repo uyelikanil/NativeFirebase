@@ -1,10 +1,14 @@
 package com.anilyilmaz.nativefirebase.feature.main.ui
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.anilyilmaz.nativefirebase.feature.profile.ProfileRoute
 import com.anilyilmaz.nativefirebase.feature.signin.SignInRoute
 import com.anilyilmaz.nativefirebase.feature.signup.SignUpRoute
 import com.anilyilmaz.nativefirebase.feature.welcome.WelcomeRoute
@@ -13,9 +17,11 @@ import com.anilyilmaz.nativefirebase.feature.welcome.WelcomeRoute
 fun NativeFirebaseApp() {
     val navController = rememberNavController()
 
-    NativeFirebaseNavHost(
-        navController = navController
-    )
+    Surface(modifier = Modifier.fillMaxSize()) {
+        NativeFirebaseNavHost(
+            navController = navController
+        )
+    }
 }
 
 @Composable
@@ -56,7 +62,11 @@ private fun NativeFirebaseNavHost(navController: NavHostController) {
             )
         }
         composable(route = "welcome") {
-            WelcomeRoute()
+            WelcomeRoute(
+                onListClick = {
+
+                }
+            )
         }
     }
 }

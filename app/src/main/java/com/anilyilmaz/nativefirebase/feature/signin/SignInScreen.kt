@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -113,7 +115,7 @@ private fun SignInScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-                .safeContentPadding()
+                .padding(horizontal = 32.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             Text(
@@ -228,15 +230,12 @@ private fun SignInLayout(userState: SignInUserState,
 @Composable
 fun SignInScreenPreview() {
     NativeFirebaseTheme {
-        SignInScreen(
-            SignInUiState.Loading,
-            SignInUserState(),
-            {},
-            {},
-            {},
-            {},
-            {},
-            {}
-        )
+        Surface(modifier = Modifier.fillMaxSize()) {
+            SignInScreen(
+                SignInUiState.Loading,
+                SignInUserState(),
+                {}, {}, {}, {}, {}, {}
+            )
+        }
     }
 }

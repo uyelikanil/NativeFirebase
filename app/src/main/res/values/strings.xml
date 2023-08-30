@@ -13,4 +13,6 @@
     <string name="an_error_occured_while_sign_up">An error occured while sign up!</string>
     <string name="welcome">Welcome</string>
     <string name="an_error_occured_while_sign_in">An error accured while sign in!</string>
+    <string name="hi_there_nice_to_see_you">Hi there! Nice to see you.</string>
+    <string name="list">List</string>
 </resources>
