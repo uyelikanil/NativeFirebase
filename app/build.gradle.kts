@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
+    implementation(libs.material)
     implementation(libs.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
@@ -80,6 +81,10 @@ dependencies {
     kapt(libs.dagger.hilt.compiler)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.room)
+    implementation(libs.room.coroutines)
+    kapt(libs.room.compiler)
+    implementation(libs.compose.foundation)
 
 }
 

@@ -26,6 +26,8 @@ class SignInViewModel @Inject constructor(private val accountRepository: Account
     private val password
         get() = userState.value.password
 
+    val hasUser = accountRepository.hasUser
+
     fun updateEmail(newValue: String) {
         userState.value = userState.value.copy(email = newValue)
     }
@@ -37,8 +39,6 @@ class SignInViewModel @Inject constructor(private val accountRepository: Account
     fun errorHandled() {
         _uiState.value = SignInUiState.SignIn
     }
-
-    fun hasUser() = accountRepository.hasUser
 
     fun onSignInClick() = viewModelScope.launch {
         _uiState.value = SignInUiState.Loading

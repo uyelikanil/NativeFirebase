@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(private val accountRepository: AccountRepository
+class SignUpViewModel @Inject constructor(
+    private val accountRepository: AccountRepository
 ): ViewModel() {
     private val _uiState = MutableStateFlow<SignUpUiState>(SignUpUiState.SignUp)
     val uiState: StateFlow<SignUpUiState> = _uiState.asStateFlow()
@@ -25,6 +26,8 @@ class SignUpViewModel @Inject constructor(private val accountRepository: Account
         get() = userState.value.email
     private val password
         get() = userState.value.password
+
+    val hasUser = accountRepository.hasUser
 
     fun updateEmail(newValue: String) {
         userState.value = userState.value.copy(email = newValue)
@@ -37,8 +40,6 @@ class SignUpViewModel @Inject constructor(private val accountRepository: Account
     fun errorHandled() {
         _uiState.value = SignUpUiState.SignUp
     }
-
-    fun hasUser() = accountRepository.hasUser
 
     fun onSignUpClick() = viewModelScope.launch {
         _uiState.value = SignUpUiState.Loading

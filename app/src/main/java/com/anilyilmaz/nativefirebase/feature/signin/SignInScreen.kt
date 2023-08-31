@@ -1,17 +1,11 @@
 package com.anilyilmaz.nativefirebase.feature.signin
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -48,7 +42,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -56,16 +49,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.anilyilmaz.nativefirebase.R
 import com.anilyilmaz.nativefirebase.core.designsystem.theme.NativeFirebaseTheme
-import com.anilyilmaz.nativefirebase.feature.signup.SignUpUiState
-import com.anilyilmaz.nativefirebase.feature.signup.SignUpUserState
-import com.anilyilmaz.nativefirebase.feature.signup.SignUpViewModel
 
 @Composable
 fun SignInRoute(viewModel: SignInViewModel = hiltViewModel(),
+                onLoggedIn: () -> Unit,
                 onSuccess: () -> Unit,
                 onSignUpClick: () -> Unit) {
-    if(viewModel.hasUser()) {
-        onSuccess()
+    if(viewModel.hasUser) {
+        onLoggedIn()
         return
     }
 

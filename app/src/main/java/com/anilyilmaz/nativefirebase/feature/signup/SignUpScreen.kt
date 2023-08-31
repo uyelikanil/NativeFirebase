@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardActions
@@ -52,10 +51,11 @@ import com.anilyilmaz.nativefirebase.core.designsystem.theme.NativeFirebaseTheme
 
 @Composable
 fun SignUpRoute(viewModel: SignUpViewModel = hiltViewModel(),
+                onLoggedIn: () -> Unit,
                 onSuccess: () -> Unit,
                 onSignInClick: () -> Unit) {
-    if(viewModel.hasUser()) {
-        onSuccess()
+    if(viewModel.hasUser) {
+        onLoggedIn()
         return
     }
 

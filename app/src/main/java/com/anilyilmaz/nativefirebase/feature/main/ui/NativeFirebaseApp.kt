@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.anilyilmaz.nativefirebase.feature.list.ListRoute
 import com.anilyilmaz.nativefirebase.feature.profile.ProfileRoute
 import com.anilyilmaz.nativefirebase.feature.signin.SignInRoute
 import com.anilyilmaz.nativefirebase.feature.signup.SignUpRoute
@@ -31,6 +32,12 @@ private fun NativeFirebaseNavHost(navController: NavHostController) {
         startDestination = "signIn") {
         composable(route = "signIn") {
             SignInRoute(
+                onLoggedIn = {
+                    navController.navigate("list") {
+                        launchSingleTop = true
+                        popUpTo("signIn") { inclusive = true }
+                    }
+                },
                 onSuccess = {
                     navController.navigate("welcome") {
                         launchSingleTop = true
@@ -47,6 +54,12 @@ private fun NativeFirebaseNavHost(navController: NavHostController) {
         }
         composable(route = "signUp") {
             SignUpRoute(
+                onLoggedIn = {
+                    navController.navigate("list") {
+                        launchSingleTop = true
+                        popUpTo("signIn") { inclusive = true }
+                    }
+                },
                 onSuccess = {
                     navController.navigate("welcome") {
                         launchSingleTop = true
@@ -64,8 +77,16 @@ private fun NativeFirebaseNavHost(navController: NavHostController) {
         composable(route = "welcome") {
             WelcomeRoute(
                 onListClick = {
-
+                    navController.navigate("list") {
+                        launchSingleTop = true
+                        popUpTo("welcome") { inclusive = true }
+                    }
                 }
+            )
+        }
+        composable(route = "list") {
+            ListRoute(
+                onProfileClick = { navController.navigate("profile") }
             )
         }
         composable(route = "profile") {
