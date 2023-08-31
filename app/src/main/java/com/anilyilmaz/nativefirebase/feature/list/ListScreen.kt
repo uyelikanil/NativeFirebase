@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DismissDirection
@@ -15,6 +16,7 @@ import androidx.compose.material.DismissState
 import androidx.compose.material.DismissValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.SwipeToDismiss
+import androidx.compose.material3.Switch
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -52,37 +54,39 @@ import com.anilyilmaz.nativefirebase.core.designsystem.theme.NativeFirebaseTheme
 
 @Composable
 fun ListRoute(viewModel: ListViewModel = hiltViewModel(), onProfileClick: () -> Unit) {
-    val offlineContents by viewModel.offlineContents.collectAsStateWithLifecycle(
-        initialValue = ListUiState()
-    )
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle(ListUiState())
     val contentState by viewModel.contentState.collectAsStateWithLifecycle()
 
     ListScreen(
-        offlineContents,
+        uiState,
         contentState,
         viewModel::updateContent,
-        viewModel::addOfflineContent,
+        viewModel::addContent,
+        viewModel::deleteRemoteContent,
         viewModel::deleteOfflineContent,
         onProfileClick)
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ListScreen(
-    offlineContents: ListUiState,
+    uiState: ListUiState,
     contentState: ListContentState,
     updateContent: (String) -> Unit,
-    addOfflineContent: () -> Unit,
+    addContent: (Boolean) -> Unit,
+    deleteRemoteContent: (String) -> Unit,
     deleteOfflineContent: (Int) -> Unit,
     onProfileClick: () -> Unit
 ) {
+    var checked by remember { mutableStateOf(true) }
+
     var openAlertDialog by remember { mutableStateOf(false) }
     val onDismissRequest = {
         openAlertDialog = false
         updateContent("")
     }
     val onConfirmation = {
-        addOfflineContent()
+        addContent(checked)
         openAlertDialog = false
     }
     val onFloatingActionButtonClick = { openAlertDialog = true }
@@ -110,41 +114,24 @@ private fun ListScreen(
             FloatingActionButton(onFloatingActionButtonClick)
         }
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-                .padding(horizontal = 32.dp)
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(it)
         ) {
-            items(
-                offlineContents.offlineContents.size,
-                key = {offlineContents.offlineContents[it].id}
-            ) {
-                val currentItem by rememberUpdatedState(offlineContents.offlineContents[it].id)
-                val dismissState = rememberDismissState(
-                    confirmStateChange = {
-                        if(it == DismissValue.DismissedToStart) {
-                            deleteOfflineContent(currentItem)
-                        }
-                        true
-                    }
-                )
+            Switch(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize(Alignment.Center),
+                checked = checked,
+                onCheckedChange = {
+                    checked = it
+                },
+            )
 
-                SwipeToDismiss(
-                    state = dismissState,
-                    background = {
-                        DismissBackground(dismissState = dismissState)
-                    },
-                    directions = setOf(DismissDirection.EndToStart),
-                    dismissContent = {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(vertical = 16.dp),
-                            text = offlineContents.offlineContents[it].content)
-                    }
-                )
-                Divider(thickness = 1.dp)
+            if(checked) {
+                RemoteContentList(uiState, deleteRemoteContent)
+            } else {
+                OfflineContentList(uiState, deleteOfflineContent)
             }
         }
 
@@ -156,7 +143,95 @@ private fun ListScreen(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun DismissBackground(dismissState: DismissState) {
+private fun OfflineContentList(
+    uiState: ListUiState,
+    deleteOfflineContent: (Int) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 32.dp)
+    ) {
+        items(
+            uiState.offlineContents.size,
+            key = {uiState.offlineContents[it].id}
+        ) {
+            val currentItem by rememberUpdatedState(uiState.offlineContents[it].id)
+            val dismissState = rememberDismissState(
+                confirmStateChange = {
+                    if(it == DismissValue.DismissedToStart) {
+                        deleteOfflineContent(currentItem)
+                    }
+                    true
+                }
+            )
+
+            SwipeToDismiss(
+                state = dismissState,
+                background = {
+                    DismissBackground(dismissState = dismissState)
+                },
+                directions = setOf(DismissDirection.EndToStart),
+                dismissContent = {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(vertical = 16.dp),
+                        text = uiState.offlineContents[it].content)
+                }
+            )
+            Divider(thickness = 1.dp)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun RemoteContentList(
+    uiState: ListUiState,
+    deleteRemoteContent: (String) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 32.dp)
+    ) {
+        items(
+            uiState.remoteContents.size,
+            key = {uiState.remoteContents[it].id}
+        ) {
+            val currentItem by rememberUpdatedState(uiState.remoteContents[it].id)
+            val dismissState = rememberDismissState(
+                confirmStateChange = {
+                    if(it == DismissValue.DismissedToStart) {
+                        deleteRemoteContent(currentItem)
+                    }
+                    true
+                }
+            )
+
+            SwipeToDismiss(
+                state = dismissState,
+                background = {
+                    DismissBackground(dismissState = dismissState)
+                },
+                directions = setOf(DismissDirection.EndToStart),
+                dismissContent = {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(vertical = 16.dp),
+                        text = uiState.remoteContents[it].content)
+                }
+            )
+            Divider(thickness = 1.dp)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun DismissBackground(dismissState: DismissState) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -266,7 +341,7 @@ fun ListScreenPreview() {
     NativeFirebaseTheme {
         ListScreen(
             ListUiState(), ListContentState(),
-            {}, {}, {}, {}
+            {}, {}, {}, {}, {}
         )
     }
 }

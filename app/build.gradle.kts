@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.icons.extended)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
